@@ -1,7 +1,6 @@
 flask
 requests[security]
 ConfigParser
-logging
 datetime
 os
 json
