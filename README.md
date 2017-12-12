@@ -1,7 +1,7 @@
 Flask Example - Hotter or Colder app
 =====================================
 
-Small example Flask applicaton created by reworking a MediaCloud Flask example created by Rahul for MAS.500.
+Small example Flask application created by reworking a MediaCloud Flask example created by Rahul for MAS.500. Weather data is fetched from an API by openweathermap.org/api. The app has been deployed using Heroku at https://hotter-or-colder-flask.herokuapp.com/.
 
 Challenges along the way
 ---------
