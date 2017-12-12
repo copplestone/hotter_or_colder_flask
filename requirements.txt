@@ -1,8 +1,6 @@
 flask
 requests[security]
 ConfigParser
-datetime
-json
 requests
 numpy
 gunicorn
