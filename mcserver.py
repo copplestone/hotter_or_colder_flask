@@ -1,6 +1,6 @@
 # python mcserver.py
 
-import ConfigParser, logging, datetime, os, json, requests
+import configparser, logging, datetime, os, json, requests
 
 import numpy as np
 
@@ -12,7 +12,7 @@ CONFIG_FILE = 'settings.config'
 basedir = os.path.dirname(os.path.realpath(__file__))
 
 # load the settings file
-config = ConfigParser.ConfigParser()
+config = configparser.ConfigParser()
 config.read(os.path.join(basedir, 'settings.config'))
 
 # set up logging

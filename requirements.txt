@@ -1,6 +1,6 @@
 flask
 requests[security]
-ConfigParser
+configparser
 requests
 numpy
 gunicorn
