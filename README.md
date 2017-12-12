@@ -1,7 +1,7 @@
-Flask Example - MediaCloud Client App
+Flask Example - Hotter or Colder app
 =====================================
 
-Small example Flask applicaton for the MAS.500 course.
+Small example Flask applicaton created by reworking a MediaCloud Flask example created by Rahul for MAS.500.
 
 Installation
 ------------
@@ -11,7 +11,7 @@ Make sure you havy Python 2.7 (and the pip package manager).
 You also need to install some requirements:
 
 ```
-pip install -r requirements.pip
+pip install -r requirements.txt
 ```
 
 Copy `settings.config.template` to `settings.config` and edit it.
@@ -27,18 +27,10 @@ python mcserver.py
 
 You will be able to monitor progress in the `logs/mcserver.log` log file.
 
-Deploying
+Challenges along the way
 ---------
 
-First, prep your Ubuntu machine:
-```
-sudo aptitude install python
-sudo aptitude install libapache2-mod-wsgi
-sudo pip install -r requirements
-```
+You need a Procfile in the root of the repo when deploying to Heroku. Only include libraries in here that aren't included with Python3 as standard.
 
-And make the `logs` folder writable by your web-user (ie. `www-data`).
-
-Now follow the instructions for Configuring Apache:
-  http://flask.pocoo.org/docs/deploying/mod_wsgi/
+You need a runtime.txt file which specifies which version of Python you're using.
 
