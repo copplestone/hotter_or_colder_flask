@@ -6,8 +6,6 @@ import numpy as np
 
 from flask import Flask, render_template, request
 
-import mediacloud
-
 CONFIG_FILE = 'settings.config'
 basedir = os.path.dirname(os.path.realpath(__file__))
 
