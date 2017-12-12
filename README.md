@@ -34,3 +34,5 @@ You need a Procfile in the root of the repo when deploying to Heroku. Only inclu
 
 You need a runtime.txt file which specifies which version of Python you're using.
 
+Use heroku logs to check what might have gone wrong when you're trying to deploy your app.
+
