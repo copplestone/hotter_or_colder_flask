@@ -24,13 +24,14 @@ weather_key = config.get('auth','api_key')
 app = Flask(__name__)
 
 # this tutorial has been pretty helpful https://www.dataquest.io/blog/python-api-tutorial/
+# graphing was taken from the following Highcharts demo - http://jsfiddle.net/gh/get/library/pure/highcharts/highcharts/tree/master/samples/highcharts/demo/line-basic/
 @app.route("/")
 def home():
+    # consider trying to use hermes cache to store weather data rather than calling the API, or store in a database
 
     # fetch data from the weather api
-    ##### I SHOULD REALLY BE STORING THIS IN A DATABASE EVERY HOUR TO MINIMIZE API CALLS #####
 
-    base_url = "http://api.openweathermap.org/data/2.5/forecast?lat=42.37&lon=71.12&APPID=" + weather_key
+    base_url = "http://api.openweathermap.org/data/2.5/forecast?lat=42.37&lon=71.12&units=metric&APPID=" + weather_key
     print(base_url)
     #parameters = {'lat':42.36,'lon':71.058}
     #response = requests.get(base_url, params=parameters)
@@ -41,6 +42,7 @@ def home():
     # extract temperature today and tomorrow
 
     weather_data = response.json()
+    #print(weather_data)
     date_time1 = weather_data["list"][0]["dt_txt"]
     date_time2 = weather_data["list"][8]["dt_txt"]
     temp_today = weather_data["list"][0]["main"]["temp"]
@@ -48,10 +50,25 @@ def home():
     print("From " + str(date_time1) + " to " + str(date_time2))
     print("Temperature now " + str(temp_today) + ", temperature tomorrow " + str(temp_tomorrow))
 
+    # extracting data for visualisation
+    today_temp_array = []
+    tomorrow_temp_array = []
+    for i in range(8):
+        today_temp_array.append(weather_data["list"][i]["main"]["temp"])
+        tomorrow_temp_array.append(weather_data["list"][i+8]["main"]["temp"])
+
+    weather_to_plot = [[0,1,2,3,4,5,6,7],today_temp_array,tomorrow_temp_array]
 
     # use weather data to figure out the change in temperature
+    sum_today = 0;
+    sum_tomorrow = 0;
+    for i in range(len(today_temp_array)):
+        sum_today += today_temp_array[i]
+        sum_tomorrow += tomorrow_temp_array[i]
+    average_today = sum_today/len(today_temp_array)
+    average_tomorrow = sum_tomorrow/len(today_temp_array)
 
-    difference = temp_today - temp_tomorrow
+    difference = average_today - average_tomorrow
     if difference > 0:
         phrase = "colder than"
     elif difference < 0:
@@ -60,43 +77,9 @@ def home():
         phrase = "about the same as"
     return render_template("weather-results.html",
                            phrase=phrase,
-                           number=9)
+                           number=9,
+                           graphData=weather_to_plot)
 
-
-@app.route("/search",methods=['POST'])
-def search_results():
-    keywords = request.form['keywords']
-    now = datetime.datetime.now()
-    start = request.form['start']
-    end = request.form['end']
-    print(start)
-    print(end)
-
-    #results = mc.sentenceCount(keywords,
-    #                           solr_filter=[mc.publish_date_query( datetime.date(int(start[0:4]), int(start[5:7]),
-    # int(start[8:10])), datetime.date(int(end[0:4]), int(end[5:7]), int(end[8:10])) ),
-    #                                        'tags_id_media:9139487'],split=true)
-
-    results = mc.sentenceCount(keywords,solr_filter=[mc.publish_date_query( datetime.date(2017,1,1), now ),'tags_id_media:9139487'], split = True, split_start_date = start, split_end_date=end)
-
-    print("results = ")
-    print(results)
-    clean_data = {}
-    sub_dict = results['split']
-    sub_dict.pop('end', None)
-    sub_dict.pop('gap', None)
-    sub_dict.pop('start', None)
-    for key in sub_dict:
-        f = key.encode('utf-8')
-        date = 'Date.UTC('+str(f[0:4])+','+str(f[5:7])+','+str(f[8:10])+')'
-        clean_data[date] = sub_dict[key]
-
-
-
-    return render_template("search-results.html",
-                           keywords=keywords,
-                           sentenceCount=results['count'],
-                           cleaned_results=json.dumps(clean_data))
 
 if __name__ == "__main__":
     app.debug = True

@@ -4,14 +4,64 @@
 
 {% block content %}
 
+
 <div class="row">
 
   <div class="col-md-12">
 
       <h1>The weather tomorrow will be {{phrase}} today.</h1>
 
+      <script src="https://code.highcharts.com/highcharts.js"></script>
+      <script src="https://code.highcharts.com/modules/series-label.js"></script>
+      <script src="https://code.highcharts.com/modules/exporting.js"></script>
+        <br><br>
+      <div id="container"></div>
+
+<script>
+    var data = {{ graphData }};
+
+Highcharts.chart('container', {
+
+    title: {
+        text: ''
+    },
+
+    yAxis: {
+        title: {
+            text: 'Temperature (degrees C)'
+        }
+    },
+
+    xAxis: {
+        labels:
+            {
+                enabled: false
+            },
+    },
+
+    series: [{
+        name: 'Today',
+        data: data[1]
+    }, {
+        name: 'Tomorrow',
+        data: data[2]
+    } ],
+
+    responsive: {
+        rules: [{
+            condition: {
+                maxWidth: 500
+            },
+        }]
+    }
+
+});
+</script>
+
   </div>
 
 </div>
+
+
 
 {% endblock %}
